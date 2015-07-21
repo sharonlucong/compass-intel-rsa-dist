@@ -1,0 +1,30 @@
+{
+    "cpu":{
+        "processor_state": "State",
+        "processor_frequency": "Frequency",
+        "processor_family": "Family",
+        "processor_model": "Model",
+        "processor_architecture": "Architecture",
+        "processor_cores": "Cores",
+        "processor_manufacture": "Manufacture"
+    },
+    "storage":{
+        "component_is_allocated": "Bootable",
+        "storage_volume_image": "Volume Image",
+        "machine_volume_type": "Volume Type",
+        "storage_volume_capacity": "Capacity",
+        "storage_volume_address": "Volume Address"
+    },
+    "memory":{
+        "memory_module_capacity": "Capacity",
+        "memory_module_type": "Type"
+    },
+    "networkport":{
+        "network_port_speed": "Port Speed",
+        "network_port_state": "Port State",
+        "network_port_type": "Port Type",
+        "network_port_index": "Port Index",
+        "mac_address": "MAC address"
+
+    }
+}

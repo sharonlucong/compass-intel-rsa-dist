@@ -1,0 +1,531 @@
+<div class="main-content">
+    <div class="tabbable" style="margin-top: 50px;">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active">
+                <a data-toggle="tab" href="#switchDiscover">
+                    <i class="green ace-icon fa fa-cog bigger-120"></i>
+                    Switch
+                </a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#rsaDiscover">
+                    <i class="blue ace-icon fa fa-cogs bigger-120"></i>
+                    RSA
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content" style="padding:20px;">
+            <div id="switchDiscover" class='tab-pane fade in active'>
+                <div class="side-padding-40 top-padding-10">
+
+                    <div class="row">
+                        <div collapse="findNewServersPanel.isCollapsed">
+                            <div class="space-20"></div>
+                            <div class="dashed-panel">
+                                <span class="action pull-right" ng-click="findNewServersPanel.isCollapsed = true;">
+                                    <i class="ace-icon fa fa-times-circle bigger-120 light-grey"></i>
+                                </span>
+                                <div class="clearfix"></div>
+                                <findservers results="foundResults" switches="allAddedSwitches"></findservers>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5 no-padding-left search-badge-adjustment">
+                            <h1 class="blue-header margin-right-7">
+                                Servers
+                            </h1>
+                            <div class="badge-adjustment">
+                                <span class="badge badge-yellow skinny-badge">{{allservers.length}}</span>
+                                    <span class="no-border-search search-small">
+                                        <span class="input-icon">
+                                            <input class="no-border" type="text" placeholder="Search" ng-model="search.$">
+                                            <i class="ace-icon fa fa-search"></i>
+                                        </span>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-md-7 no-padding-right">
+                            <div class="pull-right top-margin-17 center-align">
+                                <!-- Column Show / Hide button -->
+                                <div class="btn-group dropdown" dropdown>
+                                    <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                                        Columns
+                                        <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li ng-repeat="column in server_columns" ng-click="column.visible=!column.visible">
+                                            <a class="action">
+                                                <span ng-class="{'opacity-zero': !column.visible}">
+                                                    <i class="ace-icon fa fa-check blue"></i>
+                                                </span>
+                                                {{column.title}}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button class="btn btn-success border-radius-4 reload-servers-border" ng-click="reloadServers()">
+                                    <i class="ace-icon fa fa-refresh"></i>
+                                </button>
+                                <!--div class="btn-group" dropdown>
+                                    <button type="button" class="btn btn-info btn-default dropdown-toggle">
+                                        Actions
+                                        <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                        <li ng-click="column.visible=!column.visible">
+                                            <a class="action">
+                                                <span ng-class="{'opacity-zero': !column.visible}">
+                                                    <i class="ace-icon fa fa-check blue"></i>
+                                                </span>
+                                                Additional Actions
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div-->
+                                <button class="btn btn-info border-radius-4" ng-click="findNewServersPanel.isCollapsed = !findNewServersPanel.isCollapsed" ng-init="findNewServersPanel.isCollapsed = true;">
+                                    Discover Servers&nbsp;&nbsp;
+                                    <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !findNewServersPanel.isCollapsed}"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="space-10"></div>
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table ng-table="tableParams" class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <!--th>
+                                            <label>
+                                                <input ng-model="selectall" ng-change="selectAllServers(selectall)" type="checkbox" class="ace">
+                                                <span class="lbl"></span>
+                                            </label>
+                                        </th-->
+                                        <th ng-repeat="column in server_columns" ng-show="column.visible" class="sortable" ng-class="{'sort-asc': tableParams.isSortBy(column.field, 'asc'), 'sort-desc': tableParams.isSortBy(column.field, 'desc')}" ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+                                            <div>{{column.title}}</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr ng-show="$data.length==0">
+                                        <td colspan="7" class="center">No servers yet. Please click Discover Servers to discover available servers.</td>
+                                    </tr>
+                                    <tr ng-repeat="server in $data | filter:search" ng-class="{'success': server.new}">
+                                        <!--td>
+                                            <label>
+                                                <input ng-model="server.selected" type="checkbox" class="ace">
+                                                <span class="lbl"></span>
+                                            </label>
+                                        </td-->
+                                        <td ng-repeat="column in server_columns" ng-show="column.visible" sortable="column.field">
+                                            <span ng-switch on="column.field">
+                                                <span ng-switch-when="clusters">
+                                                    <span ng-repeat="cluster in server.clusters">
+                                                        {{cluster.name}}&nbsp;
+                                                    </span>
+                                                </span>
+                                                <span ng-switch-default>
+                                                    {{server[column.field]}}
+                                                </span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="space-10"></div>
+                </div>
+            </div>
+            <div id="rsaDiscover" class="tab-pane fade">
+                <div class="side-padding-40 top-padding-10">
+                    <div class="row">
+                        <div collapse="rsaFindNewServersPanel.isCollapsed">
+                            <div class="dashed-panel">
+                                <span class="action pull-right" ng-click="rsaFindNewServersPanel.isCollapsed = true;">
+                                    <i class="ace-icon fa fa-times-circle bigger-120 light-grey"></i>
+                                </span>
+                               <div class="clearfix"></div>
+                                <!-- ======================================================================== -->
+                                 <div class="col-lg-6 col-md-6">
+                                    <h4>Add URL</h4>
+                                    <div>Enter a URL for the RSA to find servers.</div>
+                                    <div class="space-10"></div>
+                                    <div>
+                                        <form name="addURLForm" class="form-horizontal ng-pristine ng-invalid ng-invalid-required">
+                                            <div class="form-group">
+                                                <label class="col-sm-1 control-label no-padding-right">URL</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" ng-model="rsaUrl" placeholder="URL" required="" class="ng-pristine ng-animate ng-invalid ng-invalid-required" style="width: 60%">
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <div class="clearfix">
+                                            <div class="col-md-offset-3 col-md-9">
+                                                <button class="btn btn-primary" ng-click="addRsaUrl()" ng-disabled="addURLForm.$invalid" disabled="disabled">Add</button>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="space-10"></div>
+                                            <!-- ngRepeat: alert in alerts -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <h4>Discover available servers</h4> 
+                                    <div>Select as many URL as needed and then click Discover Servers.</div>
+                                    <div class="space-10"></div>
+                                    <table id="simple-table" class="table table-striped table-bordered table-hover" >
+                                        <thead>
+                                            <tr>
+                                                <th class="center col-sm-1">
+                                                    <label class="pos-rel">
+                                                        <input type="checkbox" class="ace" ng-model="url_select" ng-change="rsaSelectAllBaseUrl(url_select)">
+                                                        <span class="lbl"></span>
+                                                    </label>
+                                                </th>
+                                                <th class="center">Status</th>
+                                                <th class="center">URL</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="" ng-repeat="baseUrl in rsaBaseURLs">
+                                                <td class="center">
+                                                    <label class="pos-rel">
+                                                        <input type="checkbox" class="ace" ng-model="baseUrl.check">
+                                                        <span class="lbl"></span>
+                                                    </label>
+                                                </td>
+                                                <td class="center">
+                                                    <span ng-if="baseUrl.rsaGetMachineStatus==''">-</span>
+                                                    <span ng-if="baseUrl.rsaGetMachineStatus == 'repolling'">
+                                                        <i class="ace-icon fa fa-spinner fa-spin orange bigger-125"></i>
+                                                    </span>
+                                                    <span ng-if="baseUrl.rsaGetMachineStatus == 'under_monitoring'">
+                                                        <i class="ace-icon fa fa-check bigger-125 green" ></i>
+                                                    </span>
+                                                    <span ng-if="baseUrl.rsaGetMachineStatus == 'error'">
+                                                        <i class="ace-icon fa fa-times bigger-125 red"></i>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    {{baseUrl.manager_base_url}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div style="text-align:center;">
+                                        <button class="btn btn-primary" style="margin-top:20px;" ng-click="rsaDiscoverServers()">
+                                             Discover Servers
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- ======================================================================== -->
+                                 <div class="clearfix"></div>
+                           <!--      <div style="overflow: auto; margin: auto; width:800px;">
+                                    <table id="simple-table" class="table table-striped table-bordered table-hover" >
+                                        <thead>
+                                            <tr>
+                                                <th class="center col-sm-1">
+                                                    <label class="pos-rel">
+                                                        <input type="checkbox" class="ace" ng-model="url_select">
+                                                        <span class="lbl"></span>
+                                                    </label>
+                                                </th>
+                                                <th class="center">Status</th>
+                                                <th class="center">URL</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="" ng-repeat="baseUrl in rsaBaseURLs">
+                                                <td class="center">
+                                                    <label class="pos-rel">
+                                                        <input type="checkbox" class="ace" ng-model="baseUrl.check">
+                                                        <span class="lbl"></span>
+                                                    </label>
+                                                </td>
+                                                <td class="center">
+                                                    <span ng-if="rsaGetMachineStatus==''">-</span>
+                                                    <span ng-if="rsaGetMachineStatus == 'under_mointoring'">
+                                                        <i class="ace-icon fa fa-spinner fa-spin orange bigger-125"></i>
+                                                    </span>
+                                                    <span ng-if="rsaGetMachineStatus == 'success'">
+                                                        <i class="ace-icon fa fa-check bigger-125 green" ></i>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    {{baseUrl.manager_base_url}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div style="text-align:center;">
+                                        <button class="btn btn-primary" style="margin-top:20px;" ng-click="rsaDiscoverServers()">
+                                             Discover Servers
+                                        </button>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="pull-left">
+                            <!--Search Input-->
+                            <span class="input-icon">
+                                <input type="text" placeholder="Search" ng-model="searchRSA.$">
+                                <i class="ace-icon fa fa-search blue"></i>
+                            </span>
+                            <!-- Column Show / Hide button -->
+                            <!-- <div class="btn-group" dropdown is-open="status.isopen">
+                                <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                                    Column Show / Hide
+                                    <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li ng-repeat="column in server_columns" ng-click="column.visible=!column.visible">
+                                        <a class="action">
+                                            <span ng-class="{'opacity-zero': !column.visible}">
+                                                <i class="ace-icon fa fa-check blue"></i>
+                                            </span>
+                                            {{column.title}}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div> -->
+                        </div>
+                        <div class="pull-right">
+                            <button class="btn btn-info" ng-click="rsaFindNewServersPanel.isCollapsed = !rsaFindNewServersPanel.isCollapsed" ng-init="rsaFindNewServersPanel.isCollapsed = true;">
+                                Discover Servers&nbsp;&nbsp;
+                                <i class="ace-icon fa fa-plus" ng-class="{'fa-minus': !rsaFindNewServersPanel.isCollapsed}"></i>
+                            </button>
+                        </div>
+                        <!-- <div class="pull-right side-padding-20">
+                            <div class="checkbox">
+                                <label>
+                                    <input ng-model="hideunselected" ng-change="hideUnselected()" type="checkbox" class="ace">
+                                    <span class="lbl">&nbsp;Hide Unselected Servers</span>
+                                </label>
+                            </div>
+                        </div> -->
+                    </div>
+                    <div class="row">
+                        <div class="space-6"></div>
+                        <div class="table-responsive">
+                           <table id="simple-table" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <!-- <th class="center">
+                                            <label class="pos-rel">
+                                                <input type="checkbox" class="ace" ng-model="rsaSelectAll" ng-change="rsaSelectAllMachine(rsaSelectAll)">
+                                                <span class="lbl"></span>
+                                            </label>
+                                        </th> -->
+                                        <th>mac</th>
+                                        <th>CPU</th>
+                                        <th>storage volume</th>
+                                        <th>memory</th>
+                                        <th>OS</th>
+                                        <th>hostname</th>
+                                        <th>clusters</th>
+                                        <th>machine state</th>
+                                        <th>installation state</th>
+                                        <th>details</th>
+
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr ng-repeat-start="machine in allRSAMachines | filter: searchRSA">
+                                        <!-- <td class="center">
+                                            <label class="pos-rel" ng-init="ifRsaPreSelect(machine)">
+                                                <input type="checkbox" class="ace" ng-model="machine.check">
+                                                <span class="lbl"></span>
+                                            </label>
+                                        </td> -->
+
+                                        <td>
+                                            <div ng-repeat="networkport in machine.machine_networkports"> {{networkport.mac_address}} </div>
+                                        </td>
+                                        <td> {{machine.machine_processors.length}}</td>
+                                        <td>
+                                            <div ng-if="machine.machine_volumes != 'unknown'">
+                                                <div ng-repeat="storage in machine.machine_volumes track by $index">
+                                                    volume{{$index+1}}: {{storage.storage_volume_capacity}} GB
+                                                </div>
+                                            </div>
+                                            <div ng-if="machine.machine_volumes == 'unknown'">
+                                                unknown
+                                            </div>
+
+                                        </td>
+
+                                        <td>{{machine.memorySize}} MB</td>
+                                        <td>{{machine.host.os_name}}</td>
+                                        <td>{{machine.host.hostname}}</td>
+                                        <td>
+                                            <div ng-repeat="cluster in machine.host.clusters">
+                                                {{cluster}}
+                                            </div>
+                                        </td>
+                                        <td>{{machine.machine_state}}</td>
+                                        <td>{{machine.host.state}}</td>
+                                        <td>
+                                            <div class="hidden-sm hidden-xs btn-group">
+                                                <button class="btn btn-xs btn-success" ng-click="showDetails = !showDetails">
+                                                    <i class="fa fa-sort-desc"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr ng-show="showDetails" ng-repeat-end>
+                                        <td colspan="10">
+                                            <div class="panel panel-info" style="float:left; min-width:190px;width:23%;margin:1%;">
+                                              <div class="panel-heading">
+                                                <h3 class="panel-title center">CPU</h3>
+                                              </div>
+                                              <div class="panel-body">
+                                                <div ng-if="machine.machine_processors != 'unknown'">
+                                                    <div class="bs-callout bs-callout-info" ng-repeat="cpu in machine.machine_processors | unique: 'rsa_module_uuid'">
+                                                        <h4>CPU{{$index+1}}</h4>
+                                                        <table style="width:100%;" class="table">
+                                                            <tr ng-repeat="(name, displayName) in detailDisplayName.cpu">
+                                                                <td> {{displayName}}:</td>
+                                                                <td>
+                                                                    <div ng-switch on="cpu[name]">
+                                                                        <div ng-switch-when="true">
+                                                                            Yes
+                                                                        </div>
+                                                                        <div ng-switch-when="false">
+                                                                            No
+                                                                        </div>
+                                                                        <div ng-switch-default>
+                                                                            {{cpu[name]}}
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                      </div>
+                                                </div>
+                                                <div ng-if="machine.machine_processors == 'unknown'">
+                                                    unknown
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            <div class="panel panel-success" style="float:left; min-width:190px;width:23%;margin:1%;">
+                                              <div class="panel-heading">
+                                                <h3 class="panel-title center">Storage</h3>
+                                              </div>
+                                              <div class="panel-body">
+                                                <div ng-if="machine.machine_volumes != 'unknown'">
+                                                    <div class="bs-callout bs-callout-success" ng-repeat="storage in machine.machine_volumes track by $index">
+                                                        <h4>Storage{{$index+1}}</h4>
+                                                        <table style="width:100%;" class="table">
+                                                             <tr ng-repeat="(name, displayName) in detailDisplayName.storage">
+                                                                <td style="width: 40%;"> {{displayName}}:</td>
+                                                                <td>
+                                                                    <div ng-switch on="storage[name]">
+                                                                        <div ng-switch-when="true">
+                                                                            Yes
+                                                                        </div>
+                                                                        <div ng-switch-when="false">
+                                                                            No
+                                                                        </div>
+                                                                        <div ng-switch-default>
+                                                                            {{storage[name]}}
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                      </div>
+                                                </div>
+                                                <div ng-if="machine.machine_volumes == 'unknown'">
+                                                    unknown
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="panel panel-purple" style="float:left; min-width:190px;width:23%;margin:1%;">
+                                              <div class="panel-heading">
+                                                <h3 class="panel-title center">Memory</h3>
+                                              </div>
+                                              <div class="panel-body">
+                                                <div ng-if="machine.machine_memories != 'unknown'">
+                                                    <div class="bs-callout bs-callout-purple" ng-repeat="memory in machine.machine_memories | unique: 'rsa_module_uuid'">
+                                                        <h4>Memory{{$index+1}}:</h4>
+                                                        <table style="width:100%;" class="table">
+                                                             <tr ng-repeat="(name, displayName) in detailDisplayName.memory">
+                                                                <td> {{displayName}}:</td>
+                                                                <td>
+                                                                    <div ng-switch on="memory[name]">
+                                                                        <div ng-switch-when="true">
+                                                                            Yes
+                                                                        </div>
+                                                                        <div ng-switch-when="false">
+                                                                            No
+                                                                        </div>
+                                                                        <div ng-switch-default>
+                                                                            {{memory[name]}}
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                      </div>
+                                                </div>
+                                                <div ng-if="machine.machine_memories == 'unknown'">
+                                                    unknown
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="panel panel-warning" style="float:left; min-width:190px;width:23%;margin:1%;">
+                                              <div class="panel-heading">
+                                                <h3 class="panel-title center">Network Port</h3>
+                                              </div>
+                                              <div class="panel-body">
+                                                <div ng-if="machine.machine_networkports != 'unknown'">
+                                                    <div class="bs-callout bs-callout-warning" ng-repeat="networkport in machine.machine_networkports">
+                                                        <h4>Network-Ports{{$index+1}}:</h4>
+                                                        <table style="width:100%;" class="table">
+                                                             <tr ng-repeat="(name, displayName) in detailDisplayName.networkport">
+                                                                <td> {{displayName}}:</td>
+                                                                <td>
+                                                                    <div ng-switch on="networkport[name]">
+                                                                        <div ng-switch-when="true">
+                                                                            Yes
+                                                                        </div>
+                                                                        <div ng-switch-when="false">
+                                                                            No
+                                                                        </div>
+                                                                        <div ng-switch-default>
+                                                                            {{networkport[name]}}
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div ng-if="machine.machine_networkports == 'unknown'">
+                                                    unknown
+                                                </div>
+                                              </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
