@@ -9606,7 +9606,7 @@ define(['angular', 'angularMocks'], function() {
         $httpBackend.whenGET(/\.*\/rsa-racks\/([0-9]|[1-9][0-9])\/cpu-usage$/).respond(function(method, url, data) {
             console.log(method, url, data);
             var cpuusage = {
-                allocated: 800,
+                allocated: 8,
                 total: 40
 
             };
