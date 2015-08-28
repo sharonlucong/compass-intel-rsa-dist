@@ -244,11 +244,11 @@
         return this.$http.get(this.settings.apiUrlBase + '/rsa-modules/' + module_id + '/storage-devices');
       };
 
-      DS.prototype.getRackDrawerModuleProcessors = function(drawer_id, module_id) {
+      DS.prototype.getRackDrawerModuleProcessors = function(module_id) {
         return this.$http.get(this.settings.apiUrlBase + '/rsa-modules/' + module_id + '/processors');
       };
 
-      DS.prototype.getRackDrawerModuleMemories = function(drawer_id, module_id) {
+      DS.prototype.getRackDrawerModuleMemories = function(module_id) {
         return this.$http.get(this.settings.apiUrlBase + '/rsa-modules/' + module_id + '/memories');
       };
 

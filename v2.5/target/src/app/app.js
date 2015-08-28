@@ -1,7 +1,7 @@
 (function() {
   define(['angular', 'uiRouter', 'angularTable', 'uiBootstrap', 'angularDragDrop', 'app/controllers/all', 'app/services/all', 'app/factory/all', 'app/directives/all', 'app/filters/all'], function(ng) {
     'use strict';
-    return ng.module("compass", ['ui.router', 'ngTable', 'ui.bootstrap', 'ngDragDrop', 'compass.controllers', 'compass.services', 'compass.factories', 'compass.directives', 'compass.filters']).config([
+    return ng.module("compass", ['ui.router', 'ngTable', 'ui.bootstrap', 'ngDragDrop', 'compass.controllers', 'compass.services', 'compass.factories', 'compass.directives', 'compass.filters', 'compassAppDev']).config([
       '$stateProvider', '$urlRouterProvider', '$httpProvider', function($stateProvider, $urlRouterProvider, $httpProvider) {
         $stateProvider.state('login', {
           url: '/login',

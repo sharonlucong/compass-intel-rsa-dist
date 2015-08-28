@@ -429,9 +429,6 @@
                     return storagesdetail["children"].push(storagedetail);
                   }
                 });
-                if (Object.keys(storagesdetail).length !== 0) {
-                  $scope.drawerData["children"][index]["children"].push(storagesdetail);
-                }
                 if (Object.keys(memoriesdetail).length !== 0 && Object.keys(processorsdetail).length !== 0) {
                   $scope.drawerData["children"][index]["children"].push(processorsdetail);
                   $scope.drawerData["children"][index]["children"].push(memoriesdetail);

@@ -29,7 +29,6 @@ define(['./baseService'], ->
                 $q = @$q
                 deferred = $q.defer()
                 @dataService.getRSAManagers().success (data) ->
-                      #console.log(data)
                       for num, value of data
                                for key, val of value
                                    if key is Namespace.podid
@@ -66,10 +65,6 @@ define(['./baseService'], ->
                 promises.push(memoryPromise)
                
                 @$q.all(promises).then (result) ->
-                     #console.log("resolved", result)
-                     #console.log("data", result[0].data)
-                     #console.log(result[1].data)
-                     #console.log(result[2].data)
                      $scope.cpuUsage = []
                      $scope.storageUsage = []
                      $scope.memoryUsage = [] 
@@ -203,11 +198,9 @@ define(['./baseService'], ->
                         else
                             unitsdetail["details"][unitkey] = unitval
 
-                        # console.log("pwrdtl", unitval, typeof unitval)
                     $scope.powerData["children"].push(unitsdetail)
                 deferred.resolve()
 
-            #console.log("powerdata", $scope.powerData)
             return deferred.promise
 
         getRackThermalZonesFans: ($scope, rackid, zoneid) ->
@@ -235,7 +228,6 @@ define(['./baseService'], ->
                         else
                             thermals["details"][thermalkey] = thermalval
                     $scope.thermalData["children"].push(thermals)
-                # console.log("powerunits", data)
                 deferred.resolve()
             return deferred.promise
 
@@ -245,21 +237,16 @@ define(['./baseService'], ->
             $scope.drawerData = {}
             $q = @$q
             deferred = $q.defer()
-            # promises.push(dataService.getRackDrawerModuleProcessors(1, 1))
             dataService.getRackDrawerModules(drawerid).success (data) ->
-                #console.log(data)
+                # console.log(data)
                 promises = []
                 $scope.drawerData["name"] = "drawer " + drawerid
                 $scope.drawerData["children"] = []
                 if data.length is 0
-                    #console.log("in")
                     $scope.drawerData["children"].push({})
                     $scope.drawerData["size"] = 200
-                    #console.log($scope.drawerData)
                     deferred.resolve()
-                    #return
                 else
-                    #$scope.drawerData["children"]=[]
                     for num, value of data                   
                         for key, val of value
                             if key is Namespace.moduleid
@@ -267,8 +254,7 @@ define(['./baseService'], ->
                                 moduledetail["name"] = "Module " + val
                                 moduledetail["children"] = []
                                 $scope.drawerData["children"].push(moduledetail)
-                                #console.log($scope.drawerData)
-                                # dataService.getRackDrawerModuleProcessors(drawerid, val)
+
                                 processorPromise = dataService.getRackDrawerModuleProcessors(drawerid, val)
                                 memoryPromise = dataService.getRackDrawerModuleMemories(drawerid, val)
                                 storagePromise = dataService.getModuleStorage(val)
@@ -278,14 +264,11 @@ define(['./baseService'], ->
                     
                     index = 0
                     $q.all(promises).then (result)->
-                        # console.log("inpromises", result)
                         memoriesdetail = {}
                         processorsdetail = {}
                         storagesdetail = {}
                         
                         angular.forEach(result, (response)->
-                            #each request in promises
-                            #console.log("response",response) 
                             angular.forEach(response.data, (responsedata)->
                                 #object in one request
                                 if responsedata[Namespace.component_name] is "Memory Module"
@@ -316,26 +299,11 @@ define(['./baseService'], ->
                                     processordetail["details"] = {}
                                     processordetail["size"] = 200
                                     for processorkey, processorval of responsedata
-                                         #do scan = (processorkey, processorval)->
                                                 if typeof processorval isnt "object"
                                                     processordetail["details"][processorkey]=processorval
-                                                #else
-                                                   # for idx, obj of processorval
-                                                      # if processorval.hasOwnProperty(idx)
-                                                         # scan(idx, obj)
-                                         #if typeof processorval isnt "string"
-                                         #   if Array.isArray(processorval)
-                                         #      for idx, obj of processorval
-                                         #         for objkey, objval of obj
-                                         #             processordetail["details"][objkey] = objval
-                                         #   else
-                                         #       for objkey, objval of processorval
-                                         #           processordetail["details"][objkey] = objval
-                                         #else
-                                         #   processordetail["details"][processorkey] = processorval
+
                                     processorsdetail["children"].push(processordetail)
                                 else
-                                    # console.log(responsedata)
                                     if !storagesdetail["name"]
                                         storagesdetail["name"] = "Storage"
                                         storagesdetail["children"] = []
@@ -347,19 +315,16 @@ define(['./baseService'], ->
                                         storagedetail["details"][storagekey] = storageval
                                     storagesdetail["children"].push(storagedetail)
                                 )
-                            if Object.keys(storagesdetail).length isnt 0
-                                $scope.drawerData["children"][index]["children"].push(storagesdetail)  
+                            # if Object.keys(storagesdetail).length isnt 0
+                            #     $scope.drawerData["children"][index]["children"].push(storagesdetail)  
                             if Object.keys(memoriesdetail).length isnt 0 and Object.keys(processorsdetail).length isnt 0
                                 $scope.drawerData["children"][index]["children"].push(processorsdetail)
                                 $scope.drawerData["children"][index]["children"].push(memoriesdetail)
-                                #$scope.drawerData["children"][index]["children"].push(storagesdetail)
-                                # console.log($scope.drawerData["children"][index]["children"])
                                 memoriesdetail = {}
                                 processorsdetail = {}
                                 storagesdetail = {}
                                 index++                    
                         )
-                        #console.log($scope.drawerData)
                         deferred.resolve()
             return deferred.promise
 

@@ -206,7 +206,6 @@
               }
             });
             t.selectAll("text").attr("dy", function(d) {
-              console.log(d.dx * ky);
               if (d.dx * ky > 50) {
                 if (d.name === "Processors") {
                   return "1em";

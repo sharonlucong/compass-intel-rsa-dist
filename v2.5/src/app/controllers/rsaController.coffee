@@ -38,11 +38,9 @@ define(['./baseController'], ()->
                             $scope.showRacks = true
                             $scope.noRacks = false
                     , 3000)
-                    # console.log("outside", $scope.cpuUsage)
 
                 #initialization
                 rsaService.getRSAManagers($scope).then(->
-                    #console.log($scope.pods)
                     $scope.selectPod(1)
                     $scope.rackid  = 1
                 )
@@ -67,11 +65,9 @@ define(['./baseController'], ()->
                 ]
 
                 $scope.getTabClass =  (tabNum) ->
-                    # console.log("getTabClass-tabNum", tabNum)
                     return tabClasses[tabNum]
   
                 $scope.getTabPaneClass =  (tabNum) ->
-                    # console.log("getTabPaneClass-tabNum", tabNum)
                     return "tab-pane " + tabClasses[tabNum]
 
                 #initialization
@@ -93,12 +89,8 @@ define(['./baseController'], ()->
                     rsaService.getRackThermalZones($scope, tabNum)
                     rsaService.getRackPowerZones($scope, tabNum)
                     rsaService.getAllChartsData($scope, tabNum).then(->
-                              #console.log("ininside", $scope.cpuUsage)
                               $scope.showPieChart = true
-                              )
-                    #rsaService.getCpuUsage($scope, tabNum)
-                    #rsaService.getMemoryUsage($scope, tabNum)
-                    #rsaService.getStorageUsage($scope, tabNum)           
+                              )         
                     tabClasses = []
                     tabClasses[tabNum] = "active"
                     $timeout(()->
@@ -142,22 +134,16 @@ define(['./baseController'], ()->
     .controller 'chartCtrl', ['$scope','rsaService', '$timeout', 'rsaFactory', '$window'
         ($scope, rsaService, $timeout, rsaFactory, $window) ->
                 $scope.render = (data) ->
-                        #console.log("inside render()", data)
                         d3.selectAll('.chart').selectAll("*").remove()                    
                         svg = d3.selectAll('.chart')
                                 .append("svg")
                                 .attr("width", '650px')
                                 .style("margin-left", '130px')
                         
-                        # svg.selectAll("*").remove()
-
-                        # w = $window.innerWidth * 0.5
-                        # h = $window.innerHeight * 0.85
                         w = 650;
                         h = 600;
                         x = d3.scale.linear().range([0, w])
                         y = d3.scale.linear().range([0, h])
-                        # color = d3.scale.category20c()
                         color = d3.scale.ordinal().range(["#0D3A6E", "#045A8D", "#0570B0","#3690C0", "#74A9CF","#4586B6","#68A9D4"])
 
                         vis = svg.attr("height", h)
@@ -178,9 +164,6 @@ define(['./baseController'], ()->
                             clickChild = true
                             if !d.parent
                                 clickChild = false
-
-                            #if !d.children
-                            #    return
 
                             if d.y then kx = (w-40) / (1-d.y) else kx = w/(1-d.y)
                             ky = h / d.dx
@@ -211,7 +194,6 @@ define(['./baseController'], ()->
                                    )
                             t.selectAll("text")
                              .attr("dy", (d)->
-                                  console.log(d.dx*ky)
                                   if d.dx*ky > 50
                                       if d.name is "Processors"
                                          return "1em"
@@ -223,7 +205,6 @@ define(['./baseController'], ()->
                                          return ".35em"
                              )
                              .style("opacity", (d)->
-                                       #console.log(d)
                                        if d.dx*ky > 30
                                            return 1
                                        else 
@@ -256,7 +237,6 @@ define(['./baseController'], ()->
                              .attr('class','helper')
                              .append("xhtml:div")
                              .style("opacity", (d)->
-                                #console.log("d.dx",d.dx, "ky", ky)
                                 if !d.children
                                     if d.dx * ky > 50
                                         return 1
@@ -338,7 +318,6 @@ define(['./baseController'], ()->
                                     return "parent"
                                 else
                                     return "child"
-                                # return d.children ? "parent" : "child";
                             )
                             .on("mouseover", (d)->
                                 if !d.parent
@@ -389,14 +368,11 @@ define(['./baseController'], ()->
                             else if d.name is "Storage"
                                 return "assets/img/storage_icon.png"
                             else if !d.child
-                                #console.log("d",d)
                                 if d.name.match(/fan\s([0-9]|[1-9][0-9])/)
-                                    #console.log("infan", d.name)
                                     return "assets/img/fan_icon.png"
                                 else if d.name.match(/psu\s([0-9]|[1-9][0-9])/)
                                     return "assets/img/powerunit_icon.png"
                                 else
-                                    #console.log("fan", d.name) 
                                     return ""
                             else
                                 return ""
@@ -422,7 +398,6 @@ define(['./baseController'], ()->
                                     return 40
                             )                        
                          .style("opacity", (d)->
-                                #console.log(d.dx*ky)
                                 if d.dx * ky > 37
                                     return 1
                                 else
@@ -435,7 +410,6 @@ define(['./baseController'], ()->
                          .attr("dy", ".35em")
                          .attr("fill", "white")
                          .style("opacity", (d)->
-                            #console.log("d.dx",d.dx, "ky", ky)
                             if d.dx * ky > 12
                                 return 1
                             else 

@@ -1572,6 +1572,8 @@ define(['angular', 'angularMocks'], function() {
 
             return [200, data, {}];
         });
+        
+
         $httpBackend.whenGET(/\.*\/rsaMachines$/).respond(function(method, url, data) {
             console.log(method, url, data);
             var data = [
@@ -1886,15 +1888,15 @@ define(['angular', 'angularMocks'], function() {
             var data = {};
             return [200, data, {}];
         });
-        $httpBackend.whenGET(/\.*\/rsa-managers\/[1-9][0-9]*/).respond(function(method, url, data) {
-            console.log(method, url, data);
-            var array = ["under_monitoring", "polling", "error"];
-            var index = Math.floor(Math.random()*10)%2;
-            var data = {
-                polling_status: array[index]
-            };
-            return [200, data, {}];
-        });
+        // $httpBackend.whenGET(/\.*\/rsa-managers\/[1-9][0-9]*/).respond(function(method, url, data) {
+        //     console.log(method, url, data);
+        //     var array = ["under_monitoring", "polling", "error"];
+        //     var index = Math.floor(Math.random()*10)%2;
+        //     var data = {
+        //         polling_status: array[index]
+        //     };
+        //     return [200, data, {}];
+        // });
         $httpBackend.whenGET(/\.*\/rsa-machines\?show_details*/).respond(function(method, url, data) {
             console.log(method, url, data);
             var data = [
@@ -8952,13 +8954,13 @@ define(['angular', 'angularMocks'], function() {
         $httpBackend.whenGET(/\.*\/rsa-managers$/).respond(function(method, url, data) {
             console.log(method, url, data);
             var rsaData = [{
-                 "resource_id": 1,
+                 "id": 1,
                  "resource_name" : "API Entry Point",
                  "manager_base_url": "http://10.239.56.62:8080/rsa/api",
                  "created_at": "xxx",
                  "updated_at": "xxx"
                 },{
-                 "resource_id": 2,
+                 "id": 2,
                  "resource_name" : "API Entry Point",
                  "manager_base_url": "http://10.239.56.62:8080/rsa/api",
                  "created_at": "xxx",
@@ -9027,7 +9029,7 @@ define(['angular', 'angularMocks'], function() {
         $httpBackend.whenGET(/\.*\/rsa-racks\/([0-9]|[1-9][0-9])$/).respond(function(method, url, data) {
             console.log(method, url, data);
             var rackData = {
-                "component_id": 1,
+                "id": 1,
                 "component_hwlid": "1.1",
                 "component_uuid": "27c7ac5e-a376-41f7-9a00-47d258ed2865",
                 "created_at": "2015-06-19 13:13:08",
@@ -9313,7 +9315,7 @@ define(['angular', 'angularMocks'], function() {
         $httpBackend.whenGET(/\.*\/rsa-racks\/([0-9]|[1-9][0-9])\/power-zones\/([0-9]|[1-9][0-9])\/supply-units$/).respond(function(method, url, data) {
             console.log(method, url, data);
             var powerUnitsData = [{
-                "component_id": 1,
+                "id": 1,
                 "description": "psu 1 in zone 1",
                 "present_power_input": 180,
                 "enable_state": "2",
@@ -9338,7 +9340,7 @@ define(['angular', 'angularMocks'], function() {
                 "health_code": 5,
                 "component_name": "psu 1"
                 },{
-                "component_id": 2,
+                "id": 2,
                 "description": "psu 2 in zone 1",
                 "present_power_input": 180,
                 "enable_state": "2",
@@ -9420,7 +9422,7 @@ define(['angular', 'angularMocks'], function() {
             return [200, modulesData, {}]
         });
 
-        $httpBackend.whenGET(/\.*\/rsa-drawers\/([0-9]|[1-9][0-9])\/modules\/([0-9]|[1-9][0-9])\/processors$/).respond(function(method, url, data) {
+        $httpBackend.whenGET(/\.*\/rsa-modules\/([0-9]|[1-9][0-9])\/processors$/).respond(function(method, url, data) {
             console.log(method, url, data);
             var processorData = [{
                 "component_is_allocated": false,
@@ -9477,7 +9479,7 @@ define(['angular', 'angularMocks'], function() {
             return [200, processorData, {}]
         });
     
-        $httpBackend.whenGET(/\.*\/rsa-drawers\/([0-9]|[1-9][0-9])\/modules\/([0-9]|[1-9][0-9])\/memories$/).respond(function(method, url, data) {
+        $httpBackend.whenGET(/\.*\/rsa-modules\/([0-9]|[1-9][0-9])\/memories$/).respond(function(method, url, data) {
             console.log(method, url, data);
             var memoryData = [{
                 "component_is_allocated": false,
@@ -9599,6 +9601,36 @@ define(['angular', 'angularMocks'], function() {
                 "component_uuid": "0d217dc1-5d2a-3720-b59c-bdeb911751e2"
             }];
             return [200, storageData, {}]
+        });
+
+        $httpBackend.whenGET(/\.*\/rsa-racks\/([0-9]|[1-9][0-9])\/cpu-usage$/).respond(function(method, url, data) {
+            console.log(method, url, data);
+            var cpuusage = {
+                allocated: 800,
+                total: 40
+
+            };
+            return [200, cpuusage, {}]
+        });
+
+        $httpBackend.whenGET(/\.*\/rsa-racks\/([0-9]|[1-9][0-9])\/memory-usage$/).respond(function(method, url, data) {
+            console.log(method, url, data);
+            var memoryusage = {
+                allocated: 65536,
+                total: 217088
+
+            };
+            return [200, memoryusage, {}]
+        });
+
+        $httpBackend.whenGET(/\.*\/rsa-racks\/([0-9]|[1-9][0-9])\/storage-usage$/).respond(function(method, url, data) {
+            console.log(method, url, data);
+            var storageusage = {
+                allocated: 40,
+                total: 800
+
+            };
+            return [200, storageusage, {}]
         });
         /*$httpBackend.whenGET(/\.*\/monit.*\/metrics$/).respond(function(method, url, data) {
             console.log(method, url, data);

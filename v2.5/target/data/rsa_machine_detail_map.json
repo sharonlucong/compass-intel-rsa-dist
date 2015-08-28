@@ -10,7 +10,6 @@
     },
     "storage":{
         "component_is_allocated": "Bootable",
-        "storage_volume_image": "Volume Image",
         "machine_volume_type": "Volume Type",
         "storage_volume_capacity": "Capacity",
         "storage_volume_address": "Volume Address"

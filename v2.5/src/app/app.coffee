@@ -8,7 +8,7 @@ define(['angular'
         'app/factory/all'
         'app/directives/all'
         'app/filters/all'
-        # 'app/server/appDev'
+        'app/server/appDev'
         ],
   (ng)->
     'use strict'
@@ -21,7 +21,7 @@ define(['angular'
                          'compass.factories'
                          'compass.directives'
                          'compass.filters'
-                         # 'compassAppDev'
+                         'compassAppDev'
                        ]
       .config ['$stateProvider','$urlRouterProvider', '$httpProvider', ($stateProvider, $urlRouterProvider, $httpProvider) ->
         $stateProvider

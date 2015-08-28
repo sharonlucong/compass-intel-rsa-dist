@@ -176,10 +176,10 @@ define(['./baseService'], () ->
         getModuleStorage: (module_id) ->
             return @$http.get(@settings.apiUrlBase + '/rsa-modules/' + module_id + '/storage-devices')
 
-        getRackDrawerModuleProcessors: (drawer_id, module_id) ->
+        getRackDrawerModuleProcessors: (module_id) ->
             return @$http.get(@settings.apiUrlBase + '/rsa-modules/' + module_id + '/processors')
 
-        getRackDrawerModuleMemories: (drawer_id, module_id) ->
+        getRackDrawerModuleMemories: (module_id) ->
             return @$http.get(@settings.apiUrlBase + '/rsa-modules/' + module_id + '/memories')
 
         getRackPowerZonesSupplyUnits: (rack_id, zone_id) ->
